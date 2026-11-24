@@ -4,6 +4,7 @@ private.env
 *.pdf
 preview-*.png
 Alejandro-Lorite-Mora.vcf
+contact-qr.png
 .card.build.html
 # render scratch (robots-render/make.sh copies these from the Slidev theme)
 robots-render/stick.js

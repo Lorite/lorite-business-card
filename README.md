@@ -33,10 +33,11 @@ cp private.example.env private.env   # then put the real phone number in private
 - `business-card-a4-sheet.pdf`: 10 cards on A4 with cut marks, for an office printer and a paper cutter.
 - `preview-1.png`: a 400 dpi preview.
 - `Alejandro-Lorite-Mora.vcf`: the vCard, built from `contact.vcf` with CRLF line endings.
+- `contact-qr.png`: a phone-screen image (1080 × 1920) with a QR code of a shorter vCard. Show it on the phone, and a phone camera that scans it offers to add the contact, with no internet. Needs `qrencode` and ImageMagick.
 
 ### The phone number stays private
 
-The phone number is not in the repository. `card.html` contains the placeholder `+45 00 00 00 00`, and `build.sh` replaces it with `PHONE` from `private.env`, which git ignores. `contact.vcf` uses the same placeholder in its `TEL` line. Without `private.env` (as in GitHub Actions), `build.sh` removes the phone line from both. The local PDFs, previews and vCard are ignored by git, because they contain the real number. `PUBLIC=1 ./build.sh` ignores `private.env` and also writes `docs/preview.png` without the phone line, for this README.
+The phone number is not in the repository. `card.html` contains the placeholder `+45 00 00 00 00`, and `build.sh` replaces it with `PHONE` from `private.env`, which git ignores. `contact.vcf` uses the same placeholder in its `TEL` line. Without `private.env` (as in GitHub Actions), `build.sh` removes the phone line from both. The local PDFs, previews, vCard and QR image are ignored by git, because they contain the real number. `PUBLIC=1 ./build.sh` ignores `private.env` and also writes `docs/preview.png` without the phone line, for this README.
 
 ## Print
 
