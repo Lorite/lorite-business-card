@@ -10,12 +10,13 @@ My business card as code: one HTML file with CSS in millimeters, printed to a pr
 
 ## Download
 
-GitHub Actions builds the card on every push to `main` (`.github/workflows/build-card.yml`) and publishes it to the rolling `card-latest` release. These public PDFs have no phone line:
+GitHub Actions builds the card on every push to `main` (`.github/workflows/build-card.yml`) and publishes it to the rolling `card-latest` release. These public files have no phone line:
 
 - [Alejandro-Lorite-Mora-business-card-print.pdf](https://github.com/Lorite/lorite-business-card/releases/download/card-latest/Alejandro-Lorite-Mora-business-card-print.pdf): one card with bleed, for a print shop.
 - [Alejandro-Lorite-Mora-business-card-a4-sheet.pdf](https://github.com/Lorite/lorite-business-card/releases/download/card-latest/Alejandro-Lorite-Mora-business-card-a4-sheet.pdf): 10 cards on A4 with cut marks.
+- [Alejandro-Lorite-Mora.vcf](https://github.com/Lorite/lorite-business-card/releases/download/card-latest/Alejandro-Lorite-Mora.vcf): the same contact details as a vCard, to save them to a phone's contacts in one step. The Contact page of [alejandro.lorite.eu](https://alejandro.lorite.eu/Contact) links to it.
 
-The workflow also checks that the QR code decodes to the website and that no phone number is in the PDF. To print cards with the phone number, build locally.
+The workflow also checks that the QR code decodes to the website, that the vCard parses, and that neither the PDF nor the vCard contains a phone number. To print cards with the phone number, build locally.
 
 ## Build
 
@@ -31,10 +32,11 @@ cp private.example.env private.env   # then put the real phone number in private
 - `business-card-print.pdf`: one card on a 91 × 61 mm page (85 × 55 mm trim plus 3 mm bleed), with TrimBox and BleedBox set, for a print shop.
 - `business-card-a4-sheet.pdf`: 10 cards on A4 with cut marks, for an office printer and a paper cutter.
 - `preview-1.png`: a 400 dpi preview.
+- `Alejandro-Lorite-Mora.vcf`: the vCard, built from `contact.vcf` with CRLF line endings.
 
 ### The phone number stays private
 
-The phone number is not in the repository. `card.html` contains the placeholder `+45 00 00 00 00`, and `build.sh` replaces it with `PHONE` from `private.env`, which git ignores. Without `private.env` (as in GitHub Actions), `build.sh` removes the phone line. The local PDFs and previews are ignored by git, because they contain the real number. `PUBLIC=1 ./build.sh` ignores `private.env` and also writes `docs/preview.png` without the phone line, for this README.
+The phone number is not in the repository. `card.html` contains the placeholder `+45 00 00 00 00`, and `build.sh` replaces it with `PHONE` from `private.env`, which git ignores. `contact.vcf` uses the same placeholder in its `TEL` line. Without `private.env` (as in GitHub Actions), `build.sh` removes the phone line from both. The local PDFs, previews and vCard are ignored by git, because they contain the real number. `PUBLIC=1 ./build.sh` ignores `private.env` and also writes `docs/preview.png` without the phone line, for this README.
 
 ## Print
 
@@ -49,6 +51,7 @@ All content stays at least 5 mm inside the trim line, so a small cutting error d
 | Path | What it is |
 | --- | --- |
 | `card.html` | The card: layout, text and CSS. Edit this file to change the card. |
+| `contact.vcf` | The vCard template. Keep its details the same as `card.html`. |
 | `build.sh`, `finalize.py` | Chrome prints the PDF, then `finalize.py` (pypdf) sets the exact page size, TrimBox and BleedBox, and builds the A4 sheet. |
 | `assets/` | QR code and the robot drawing in three styles: `robots-duotone.png` (used), `robots-color.png`, `robots-watermark.png`. |
 | `robots-render/` | Renders the robot drawing again from the Slidev theme: `PW=<dir with playwright@1.63.0> robots-render/make.sh`. |
