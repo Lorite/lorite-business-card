@@ -25,7 +25,7 @@ jobs:
       - name: Install poppler and the card fonts
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq poppler-utils fonts-lato fonts-font-awesome
+          sudo apt-get install -y -qq poppler-utils fonts-lato fonts-font-awesome qrencode imagemagick
           fc-list | grep -qi "Lato" && fc-list | grep -qi "FontAwesome"
           google-chrome --version
       - name: Build the PDFs
