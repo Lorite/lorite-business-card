@@ -1,0 +1,68 @@
+# Build the business card PDFs on every push to main and publish them as the assets of the rolling "card-latest" release.
+# Stable download links:
+#   https://github.com/Lorite/lorite-business-card/releases/download/card-latest/Alejandro-Lorite-Mora-business-card-print.pdf
+#   https://github.com/Lorite/lorite-business-card/releases/download/card-latest/Alejandro-Lorite-Mora-business-card-a4-sheet.pdf
+# The runner has no private.env, so the public PDFs have no phone line. Print cards with the phone number from a local build.
+name: Build business card
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: build-card-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.4.0
+      - name: Install poppler and the card fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils fonts-lato fonts-font-awesome
+          fc-list | grep -qi "Lato" && fc-list | grep -qi "FontAwesome"
+          google-chrome --version
+      - name: Build the PDFs
+        run: ./build.sh
+      - name: Check the QR code and that no phone number leaked
+        run: |
+          uv run -q --with opencv-python-headless python -c "import cv2, sys; u = cv2.QRCodeDetector().detectAndDecode(cv2.imread('preview-1.png'))[0]; print(u); sys.exit(u != 'https://alejandro.lorite.eu')"
+          ! pdftotext business-card-print.pdf - | grep -F "+45"
+      - name: Rename
+        run: |
+          cp business-card-print.pdf Alejandro-Lorite-Mora-business-card-print.pdf
+          cp business-card-a4-sheet.pdf Alejandro-Lorite-Mora-business-card-a4-sheet.pdf
+      - uses: actions/upload-artifact@v7
+        with:
+          name: business-card
+          path: |
+            Alejandro-Lorite-Mora-business-card-print.pdf
+            Alejandro-Lorite-Mora-business-card-a4-sheet.pdf
+            preview-1.png
+
+  release:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TAG: card-latest
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: business-card
+      - name: Create the release once, then replace its PDFs
+        run: |
+          if ! gh release view "$TAG" > /dev/null 2>&1; then
+              gh release create "$TAG" --target "$GITHUB_SHA" --title "Business card (latest)" --notes "Built automatically from main."
+          fi
+          gh release upload "$TAG" Alejandro-Lorite-Mora-business-card-print.pdf Alejandro-Lorite-Mora-business-card-a4-sheet.pdf --clobber
+          gh release edit "$TAG" --notes "Built automatically from commit ${GITHUB_SHA::7} on $(date -u +%Y-%m-%d). Public build without the phone number."

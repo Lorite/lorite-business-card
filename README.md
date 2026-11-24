@@ -2,11 +2,20 @@
 
 My business card as code: one HTML file with CSS in millimeters, printed to a print-ready PDF by headless Chrome.
 
-![Business card preview, with a placeholder phone number](docs/preview.png)
+![Business card preview, public version without the phone number](docs/preview.png)
 
 - European size, 85 × 55 mm, one-sided, white background, so any office printer or print shop can print it.
 - The drawing of the Spot quadruped and the Crazyflie drone comes from the stick-scene props of my (private) Slidev presentation theme, recolored in the two tones of the card.
 - The QR code opens [alejandro.lorite.eu](https://alejandro.lorite.eu).
+
+## Download
+
+GitHub Actions builds the card on every push to `main` (`.github/workflows/build-card.yml`) and publishes it to the rolling `card-latest` release. These public PDFs have no phone line:
+
+- [Alejandro-Lorite-Mora-business-card-print.pdf](https://github.com/Lorite/lorite-business-card/releases/download/card-latest/Alejandro-Lorite-Mora-business-card-print.pdf): one card with bleed, for a print shop.
+- [Alejandro-Lorite-Mora-business-card-a4-sheet.pdf](https://github.com/Lorite/lorite-business-card/releases/download/card-latest/Alejandro-Lorite-Mora-business-card-a4-sheet.pdf): 10 cards on A4 with cut marks.
+
+The workflow also checks that the QR code decodes to the website and that no phone number is in the PDF. To print cards with the phone number, build locally.
 
 ## Build
 
@@ -25,7 +34,7 @@ cp private.example.env private.env   # then put the real phone number in private
 
 ### The phone number stays private
 
-The phone number is not in the repository. `card.html` contains the placeholder `+45 00 00 00 00`, and `build.sh` replaces it with `PHONE` from `private.env`, which git ignores. The PDFs and previews are ignored as well, because they contain the real number. `PUBLIC=1 ./build.sh` ignores `private.env` and also writes `docs/preview.png` with the placeholder, for this README.
+The phone number is not in the repository. `card.html` contains the placeholder `+45 00 00 00 00`, and `build.sh` replaces it with `PHONE` from `private.env`, which git ignores. Without `private.env` (as in GitHub Actions), `build.sh` removes the phone line. The local PDFs and previews are ignored by git, because they contain the real number. `PUBLIC=1 ./build.sh` ignores `private.env` and also writes `docs/preview.png` without the phone line, for this README.
 
 ## Print
 
