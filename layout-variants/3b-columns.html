@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Business card - Alejandro Lorite Mora</title>
+<!--
+Professional business card, one-sided, white background.
+Trim size 85 x 55 mm (European standard), 3 mm bleed on every side, so the page is 91 x 61 mm.
+All content stays at least 5 mm inside the trim line, so a small cutting error does not show. Build with ./build.sh.
+-->
+<style>
+  @page { size: 91mm 61mm; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: "Lato", sans-serif; color: #1b2a41; }
+
+  .page { width: 91mm; height: 61mm; position: relative; background: #fff; overflow: hidden; }
+  /* content box: trim (3 mm) + safe margin (5.5 mm) */
+  .content { position: absolute; left: 8.5mm; top: 8.5mm; right: 8.5mm; bottom: 8mm; }
+
+  .name { font-size: 4.4mm; font-weight: 700; letter-spacing: -.02mm; line-height: 1.1; }
+  .title { font-size: 2.6mm; color: #5b6676; margin-top: .9mm; line-height: 1.3; }
+  .rule { width: 8mm; height: .45mm; background: #17a2a8; margin: 2.4mm 0 2.2mm; }
+  .org { font-size: 2.5mm; font-weight: 700; line-height: 1.45; }
+  .org span { font-weight: 400; color: #5b6676; }
+
+  .contact { position: absolute; left: 0; bottom: 0; font-size: 2.5mm; line-height: 1.5; }
+  .contact b { display: inline-block; width: 3.2mm; color: #17a2a8; font-family: FontAwesome; font-weight: 400; font-size: 2.1mm; }
+
+  .robots { position: absolute; right: 0; top: 7mm; width: 20mm; }
+  .qr { position: absolute; right: 0; bottom: .3mm; width: 13mm; height: 13mm; }
+
+  body.guides .page::after { content: ""; position: absolute; left: 3mm; top: 3mm; width: 85mm; height: 55mm; outline: .15mm dashed magenta; }
+
+  .divider { position: absolute; left: 53mm; top: 0; bottom: 0; width: .2mm; background: #d5dbe2; }
+  .robots { right: 0; top: 3mm; width: 19mm; }
+  .qr { right: 2.8mm; }
+
+</style>
+</head>
+<body>
+<section class="page">
+  <div class="content">
+    <div class="name">Alejandro Lorite Mora</div>
+    <div class="title">Industrial PhD Researcher, Robotics</div>
+    <div class="rule"></div>
+    <div class="org">IT University of Copenhagen <span>&amp;</span> Novo Nordisk</div>
+
+    <div class="contact">
+      <div><b>&#xf095;</b>+45 00 00 00 00</div>
+      <div><b>&#xf0e0;</b>a.lorite.mora@gmail.com</div>
+      <div><b>&#xf0ac;</b>alejandro.lorite.eu</div>
+      <div><b>&#xf0e1;</b>linkedin.com/in/alejandro-lorite-mora</div>
+    </div>
+
+    <!-- Spot and the Crazyflie, rendered from the robots.js props of the Slidev theme (lorite_presentations_phd_slidev) -->
+    <img class="robots" src="../assets/robots-duotone.png" alt="">
+    <div class="divider"></div>
+
+    <img class="qr" src="../assets/qr.svg" alt="QR code to alejandro.lorite.eu">
+  </div>
+</section>
+</body>
+</html>

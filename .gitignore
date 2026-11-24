@@ -1,0 +1,10 @@
+# private data
+private.env
+# build outputs
+*.pdf
+preview-*.png
+.card.build.html
+# render scratch (robots-render/make.sh copies these from the Slidev theme)
+robots-render/stick.js
+robots-render/robots.js
+robots-render/duo.png
